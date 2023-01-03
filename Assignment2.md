@@ -13,7 +13,7 @@ Comprehensive tool<br>
 Scalable<br>
 Easy to learn<b>
 
-### Dusadvantages of Go?<br>
+### Disadvantages of Go?<br>
 It's a relatively new language with not many libraries or information.
 Its simplicity seems superficial because of its internal inconsistencies.
 With limited scope, automation can invite errors.
