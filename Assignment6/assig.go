@@ -2,7 +2,12 @@ package main
 
 import (
 	"fmt"
+	"io"
+	"io/ioutil"
 	"math"
+	"net/http"
+	"os"
+	"strings"
 )
 
 type Person struct {
@@ -81,6 +86,13 @@ func main() {
 
 	info(CIRCLE{radius: 9.00})
 	info(SQUARE{length: 9.11, width: 8.22})
+	var s string
+	fmt.Println("enter an url to get data :")
+	fmt.Scanln(&s)
+	fmt.Println(wordOccurenceCount(createFileAndLoadData(s)))
+	// var t SHAPE
+	// t =CIRCLE{radius: 9.55}
+	// t.Area()
 
 }
 func outputOfSlice(pSlice []Person) {
@@ -116,4 +128,41 @@ func (c CIRCLE) Area() float64 {
 func info(s SHAPE) {
 	fmt.Println(s)
 	fmt.Println(s.Area())
+}
+func createFileAndLoadData(s string) string {
+	if x, y := http.Get(s); y != nil {
+		fmt.Println("can't retrive the data from the url,", y.Error(), x.Status)
+		return ""
+	} else {
+		if f, err := os.Create("assignment6.txt"); err != nil {
+			fmt.Println("can't retrive the data from the url,", err.Error())
+			return ""
+		} else {
+			io.Copy(f, x.Body)
+			return "assignment6.txt"
+		}
+
+	}
+
+}
+func wordOccurenceCount(s string) map[string]int {
+
+	var m = map[string]int{}
+	if f, err := ioutil.ReadFile(s); err != nil {
+		fmt.Println("error while reading the file", err.Error())
+		return nil
+	} else {
+
+		for _, v := range strings.Split(string(f), " ") {
+			if val, ok := m[v]; !ok {
+				m[v] = 1
+			} else {
+				m[v] = val + 1
+			}
+
+		}
+
+	}
+
+	return m
 }
